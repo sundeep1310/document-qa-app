@@ -1,48 +1,25 @@
-# Document Q&A Application
+# Excel Q&A Application
 
-A web-based application that allows users to upload Excel documents and ask questions about their content using AI-powered analysis.
+A web application that allows users to upload Excel files and ask questions about their content. The application provides an intuitive interface to analyze and query Excel data.
 
 ## Features
 
-- Document upload support for XLSX files
-- AI-powered question answering system
-- Real-time data processing
-- Interactive UI with document preview
-- Support for large files (up to 30MB)
+- Upload and process Excel files (XLSX/XLS)
+- Support for files up to 30MB
+- Interactive data preview
+- Natural language querying of Excel content
+- Real-time data visualization
 - Responsive design for all devices
 
 ## Tech Stack
 
-- Frontend: React.js with Vite
-- Styling: Tailwind CSS
-- File Processing: SheetJS (xlsx)
-- UI Components: shadcn/ui
-- State Management: React Context
-- Data Visualization: Recharts
-- Deployment: Vercel
+- React 18+
+- Vite
+- Tailwind CSS
+- XLSX (SheetJS) for Excel processing
+- UI Components
 
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── FileUpload.jsx
-│   ├── QuestionInput.jsx
-│   ├── AnswerDisplay.jsx
-│   ├── DataPreview.jsx
-│   └── Layout.jsx
-├── contexts/
-│   └── DocumentContext.jsx
-├── hooks/
-│   └── useDocumentProcessor.js
-├── lib/
-│   ├── xlsx-utils.js
-│   └── ai-utils.js
-├── App.jsx
-└── main.jsx
-```
-
-## Setup Instructions
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -55,34 +32,71 @@ cd document-qa-app
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
-```
-VITE_API_KEY=your_api_key_here
-```
-
-4. Start the development server:
+3. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Build for production:
-```bash
-npm run build
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── ui/
+|        └── alert.jsx
+|        └── button.jsx
+|        └── card.jsx
+|        └── input.jsx
+|        └── progress.jsx          
+│   ├── FileUpload.jsx
+│   ├── QuestionInput.jsx
+│   ├── AnswerDisplay.jsx
+│   ├── DataPreview.jsx
+│   └── Layout.jsx
+├── contexts/
+│   └── DocumentContext.jsx
+├── lib/
+│   └── utils.js
+├── App.jsx
+└── main.jsx
 ```
 
 ## Usage
 
-1. Upload an Excel document using the file upload button
-2. Wait for the document to be processed
-3. Ask questions about the document content in the question input field
-4. View answers and relevant data visualizations in the response section
+1. Launch the application
+2. Use the file upload area to upload an Excel file
+3. Once uploaded, you'll see a preview of your data
+4. Type your question in the input field
+5. View the answers and relevant data from your Excel file
 
-## Deployment
+## Example Questions
 
-The application is deployed on Vercel. You can deploy your own instance by:
+You can ask questions like:
+- "Show me rows containing [specific term]"
+- "Find all entries with [value]"
+- "List rows where [column] contains [value]"
+- "Give me all rows related to [term]"
 
-1. Fork this repository
-2. Connect your fork to Vercel
-3. Configure environment variables in Vercel dashboard
-4. Deploy
+## Development
+
+### Prerequisites
+- Node.js 16+
+- npm or yarn
+
+### Setup Development Environment
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Run in development mode:
+```bash
+npm run dev
+```
+
+3. Build for production:
+```bash
+npm run build
+```
 

@@ -1,10 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as XLSX from 'xlsx';
-import uniq from 'lodash/uniq';
-import groupBy from 'lodash/groupBy';
-import get from 'lodash/get';
-import flatten from 'lodash/flatten';
+import lodash from 'lodash';
 
 const DocumentContext = createContext(null);
 
@@ -54,7 +51,7 @@ export const DocumentProvider = ({ children }) => {
         val !== null && 
         val.toString().trim() !== ''
       );
-      const uniqueValues = uniq(nonEmptyValues);
+      const uniqueValues = lodash.uniq(nonEmptyValues);
       
       return {
         header,

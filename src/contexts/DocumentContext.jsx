@@ -12,9 +12,6 @@ export const useDocument = () => {
   return context;
 };
 
-// Utility function to replace lodash.uniq
-const getUniqueValues = (arr) => [...new Set(arr)];
-
 export const DocumentProvider = ({ children }) => {
   const [document, setDocument] = useState(null);
   const [processing, setProcessing] = useState(false);
@@ -29,12 +26,11 @@ export const DocumentProvider = ({ children }) => {
     const dataRows = jsonData.slice(1);
 
     const nonEmptyRows = dataRows.filter(row => {
-      const hasNonEmptyValue = row.some(cell => {
+      return row.some(cell => {
         if (cell === undefined || cell === null) return false;
         const cellStr = cell.toString().trim();
         return cellStr !== '' && cellStr !== '0' && cellStr !== '0.0';
       });
-      return hasNonEmptyValue;
     });
 
     return [headerRow, ...nonEmptyRows].map(row => 
@@ -53,7 +49,7 @@ export const DocumentProvider = ({ children }) => {
         val !== null && 
         val.toString().trim() !== ''
       );
-      const uniqueValues = getUniqueValues(nonEmptyValues);
+      const uniqueValues = [...new Set(nonEmptyValues)];
       
       return {
         header,
@@ -66,15 +62,22 @@ export const DocumentProvider = ({ children }) => {
       };
     });
 
+    const emptyRows = rows.filter(row => 
+      row.every(cell => !cell || cell.toString().trim() === '')
+    ).length;
+
+    const dateColumns = columnAnalysis.filter(col => col.isDate).length;
+    const numericColumns = columnAnalysis.filter(col => col.isNumeric).length;
+
     return {
       columnAnalysis,
       statistics: {
         totalRows: rows.length,
         totalColumns: headers.length,
-        emptyRows: rows.filter(row => row.every(cell => !cell || cell.toString().trim() === '')).length,
+        emptyRows,
         hasHeaders: headers.every(header => header && header.trim() !== ''),
-        dateColumns: columnAnalysis.filter(col => col.isDate).length,
-        numericColumns: columnAnalysis.filter(col => col.isNumeric).length
+        dateColumns,
+        numericColumns
       },
       headers,
       sampleRows: rows.slice(0, 5)
@@ -135,18 +138,6 @@ export const DocumentProvider = ({ children }) => {
     }
   };
 
-  const findRelevantData = (searchTerms, rows) => {
-    const normalizedTerms = searchTerms.map(term => term.toUpperCase());
-    
-    return rows.filter(row =>
-      normalizedTerms.some(term =>
-        row.some(cell => 
-          cell && cell.toString().toUpperCase().includes(term)
-        )
-      )
-    );
-  };
-
   const analyzeQuestion = async (questionText) => {
     try {
       if (!data || !dataAnalysis) {
@@ -162,7 +153,12 @@ export const DocumentProvider = ({ children }) => {
 
       const headers = data[0];
       const dataRows = data.slice(1);
-      const relevantRows = findRelevantData(searchTerms, dataRows, headers);
+
+      const relevantRows = dataRows.filter(row =>
+        searchTerms.some(term =>
+          row.some(cell => cell && cell.toString().toUpperCase().includes(term))
+        )
+      );
 
       let answer = '';
       if (relevantRows.length > 0) {
@@ -187,7 +183,6 @@ export const DocumentProvider = ({ children }) => {
         relevantData: relevantRows.length > 0 ? [headers, ...relevantRows] : null,
         matchCount: relevantRows.length
       });
-
     } catch (error) {
       setError(error.message);
       setAnswer(null);

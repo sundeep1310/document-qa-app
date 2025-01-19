@@ -1,7 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as XLSX from 'xlsx';
-import lodash from 'lodash';
 
 const DocumentContext = createContext(null);
 
@@ -12,6 +11,9 @@ export const useDocument = () => {
   }
   return context;
 };
+
+// Utility function to replace lodash.uniq
+const getUniqueValues = (arr) => [...new Set(arr)];
 
 export const DocumentProvider = ({ children }) => {
   const [document, setDocument] = useState(null);
@@ -51,7 +53,7 @@ export const DocumentProvider = ({ children }) => {
         val !== null && 
         val.toString().trim() !== ''
       );
-      const uniqueValues = lodash.uniq(nonEmptyValues);
+      const uniqueValues = getUniqueValues(nonEmptyValues);
       
       return {
         header,
@@ -133,7 +135,7 @@ export const DocumentProvider = ({ children }) => {
     }
   };
 
-  const findRelevantData = (searchTerms, rows, headers) => {
+  const findRelevantData = (searchTerms, rows) => {
     const normalizedTerms = searchTerms.map(term => term.toUpperCase());
     
     return rows.filter(row =>

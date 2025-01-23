@@ -100,3 +100,5 @@ npm run dev
 npm run build
 ```
 
+Link to the Deployed version : https://document-qa-app-sundeeps-projects-ad6b82fc.vercel.app/
+
